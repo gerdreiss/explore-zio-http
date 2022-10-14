@@ -7,13 +7,15 @@ import zhttp.service.Server
 
 object ZHTTP extends ZIOAppDefault:
 
-  val app: UHttp[Request, Response] = Http.collect[Request] {
-    case Method.GET -> !! / "owls" => Response.text("Hello owls!")
-  }
+  val app: UHttp[Request, Response] =
+    Http.collect[Request] { //
+      case Method.GET -> !! / "owls" => Response.text("Hello owls!")
+    }
 
-  val zApp: UHttpApp = Http.collectZIO[Request] {
-    case Method.POST -> !! / "owls" => Random.nextString(10).map(s => Response.text(s"Hello, $s!"))
-  }
+  val zApp: UHttpApp =
+    Http.collectZIO[Request] { //
+      case Method.POST -> !! / "owls" => Random.nextString(10).map(s => Response.text(s"Hello, $s!"))
+    }
 
   val combined = app ++ zApp
 
