@@ -9,12 +9,10 @@ object ZHTTP extends ZIOAppDefault:
 
   val app: UHttp[Request, Response] = Http.collect[Request] {
     case Method.GET -> !! / "owls" => Response.text("Hello owls!")
-    case _                         => Response.status(Status.NotFound)
   }
 
   val zApp: UHttpApp = Http.collectZIO[Request] {
     case Method.POST -> !! / "owls" => Random.nextString(10).map(s => Response.text(s"Hello, $s!"))
-    case _                          => ZIO.succeed(Response.status(Status.NotFound))
   }
 
   val combined = app ++ zApp
